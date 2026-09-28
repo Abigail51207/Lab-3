@@ -35,9 +35,11 @@ def is_power_of(base, num):
         >>> is_power_of(4, 32)
         False
     """
-    ## YOUR CODE STARTS HERE
-    pass
-
+    if num == 1:
+        return True
+    if num < 1 or base == 1 or num % base != 0:
+        return False
+    return is_power_of(base, num // base)
 
 
 
@@ -57,9 +59,12 @@ def cut(a_list):
         >>> cut([5, 7, -1, 6, -3, 1, 8, 785, 5, -2, 1, 0, 42]) # Found(-1) Delete -1. Found(-3) Delete -3, 1 and 8. Found(-2) Delete -2 and 0
         [5, 7, 6, 785, 5, 0, 42]
 	"""
-    ## YOUR CODE STARTS HERE
-    pass
-
+    if not a_list:
+        return []
+    if a_list[0] < 0:
+        skip_count = abs(a_list[0])
+        return cut(a_list[skip_count:])
+    return [a_list[0]] + cut(a_list[1:])
 
 
 
@@ -72,10 +77,13 @@ def right_max(num_list):
         >>> right_max([1, 25, 3, 48, 5, 6, 12, 14, 89, 3, 2])
         [89, 89, 89, 89, 89, 89, 89, 89, 89, 3, 2]
     """
-    ## YOUR CODE STARTS HERE
-    pass
-
-
+    if not num_list:
+        return []
+    if len(num_list) == 1:
+        return [num_list[0]]
+    rest = right_max(num_list[1:])
+    current_max = num_list[0] if num_list[0] > rest[0] else rest[0]
+    return [current_max] + rest
 
 
 
@@ -88,8 +96,13 @@ def consecutive_digits(num):
         >>> consecutive_digits(122)
         True
     """
-    ## YOUR CODE STARTS HERE
-    pass
+    if num < 10:
+        return False
+    last_digit = num % 10
+    next_digit = (num // 10) % 10
+    if last_digit == next_digit:
+        return True
+    return consecutive_digits(num // 10)
 
 
 
@@ -104,19 +117,20 @@ def only_evens(num):
         >>> only_evens(13847896213354889741236)
         84862488426
     """
-    ## YOUR CODE STARTS HERE
-    pass
+    if num == 0:
+        return 0
+    rest = only_evens(num // 10)
+    last_digit = num % 10
+    if last_digit % 2 == 0:
+        return rest * 10 + last_digit
+    return rest
 
 
 
 def run_tests():
     import doctest
-
-    #- Run tests in all docstrings
-    #doctest.testmod(verbose=True)
-    
-    #- Run tests per function - Uncomment the next line to run doctest by function. Replace is_power_of with the name of the function you want to test
-    #doctest.run_docstring_examples(is_power_of, globals(), name='LAB3',verbose=True)
+    doctest.testmod(verbose=True)
+    doctest.run_docstring_examples(is_power_of, globals(), name='LAB3',verbose=True)
 
 if __name__ == "__main__":
     run_tests()
